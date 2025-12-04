@@ -4,7 +4,7 @@ Author: Khalifaalhasan
 Divisi: Back-End
 ================================================================
 
-A. PERSYARATAN SISTEM (PREREQUISITES)
+A. PERSYARATAN SISTEM (PREREQUISITES) -
 -------------------------------------
 1. Pastikan "Go" (Golang) sudah terinstal di komputer Anda.
    Cek dengan perintah terminal: go version
