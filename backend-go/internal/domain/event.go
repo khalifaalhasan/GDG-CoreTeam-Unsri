@@ -16,4 +16,7 @@ type EventRepository interface {
 	GetAll(ctx context.Context) ([]Event, error)
 	// Tambahkan ini karena kamu mau bikin fitur CreateNewEvent
 	Create(ctx context.Context, event *Event) error 
+	Update(ctx context.Context, id string, event *Event) error 
+	Delete(ctx context.Context, id string) error 
+	GetByID(ctx context.Context, id string) (*Event, error)
 }

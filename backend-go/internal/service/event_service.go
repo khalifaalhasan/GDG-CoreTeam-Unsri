@@ -34,3 +34,28 @@ func (s *EventService) CreateNewEvent(ctx context.Context, event *domain.Event, 
 
 	return s.repo.Create(ctx, event)
 }
+
+// 1. Get Event By ID
+func (s *EventService) GetEventByID(ctx context.Context, id string) (*domain.Event, error) {
+	return s.repo.GetByID(ctx, id)
+}
+
+// ... (code sebelumnya) ...
+
+// UPDATE Event Logic
+func (s *EventService) UpdateEvent(ctx context.Context, id string, event *domain.Event) error {
+	if id == "" {
+		return errors.New("id is required")
+	}
+    // Pastikan ID di struct sama dengan ID di URL
+    event.ID = id 
+	return s.repo.Update(ctx, id, event)
+}
+
+// DELETE Event Logic
+func (s *EventService) DeleteEvent(ctx context.Context, id string) error {
+	if id == "" {
+		return errors.New("id is required")
+	}
+	return s.repo.Delete(ctx, id)
+}

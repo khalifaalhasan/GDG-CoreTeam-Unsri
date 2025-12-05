@@ -67,3 +67,29 @@ func (r *firebaseRepo) Create(ctx context.Context, event *domain.Event) error {
 	
 	return nil
 }
+
+func (r *firebaseRepo) GetByID(ctx context.Context, id string) (*domain.Event, error) {
+	doc, err := r.client.Collection("events").Doc(id).Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var event domain.Event
+	if err := doc.DataTo(&event); err != nil {
+		return nil, err
+	}
+	event.ID = doc.Ref.ID
+	return &event, nil
+}
+
+func (r *firebaseRepo) Update(ctx context.Context, id string, event *domain.Event) error {
+    // .Set akan menimpa data lama dengan data baru
+	_, err := r.client.Collection("events").Doc(id).Set(ctx, event)
+	return err
+}
+
+// DELETE: Menghapus data event berdasarkan ID
+func (r *firebaseRepo) Delete(ctx context.Context, id string) error {
+	_, err := r.client.Collection("events").Doc(id).Delete(ctx)
+	return err
+}
