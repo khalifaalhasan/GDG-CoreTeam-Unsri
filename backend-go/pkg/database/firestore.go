@@ -3,38 +3,34 @@ package database
 import (
 	"context"
 	"fmt"
-	"path/filepath"
 
-	firebase "firebase.google.com/go"
 	"cloud.google.com/go/firestore"
+	firebase "firebase.google.com/go"
+	"firebase.google.com/go/auth"
 	"google.golang.org/api/option"
 )
 
-// InitFirestore menginisialisasi aplikasi Firebase dan mengembalikan client Firestore
-func InitFirestore(ctx context.Context) (*firestore.Client, error) {
-	// Best Practice: Gunakan environment variable untuk path key
-	// Tapi untuk sekarang kita hardcode path relatif dulu agar mudah dicoba
-	serviceAccountPath := "serviceAccountKey.json"
+// Kita return Firestore Client DAN Auth Client
+func InitFirebase(ctx context.Context) (*firestore.Client, *auth.Client, error) {
+	// Pastikan path serviceAccountKey.json benar
+	sa := option.WithCredentialsFile("./serviceAccountKey.json")
 	
-	// Pastikan path absolut (opsional, untuk keamanan jika run dari folder berbeda)
-	absPath, err := filepath.Abs(serviceAccountPath)
+	app, err := firebase.NewApp(ctx, nil, sa)
 	if err != nil {
-		return nil, fmt.Errorf("gagal mendapatkan path absolut: %v", err)
+		return nil, nil, fmt.Errorf("error initializing app: %v", err)
 	}
 
-	opt := option.WithCredentialsFile(absPath)
-	
-	// Inisialisasi Firebase App
-	app, err := firebase.NewApp(ctx, nil, opt)
+	// 1. Init Firestore
+	firestoreClient, err := app.Firestore(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("error inisialisasi firebase app: %v", err)
+		return nil, nil, fmt.Errorf("error initializing firestore: %v", err)
 	}
 
-	// Inisialisasi Firestore Client
-	client, err := app.Firestore(ctx)
+	// 2. Init Auth (PENTING BUAT LOGIN)
+	authClient, err := app.Auth(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("error inisialisasi firestore client: %v", err)
+		return nil, nil, fmt.Errorf("error initializing auth: %v", err)
 	}
 
-	return client, nil
+	return firestoreClient, authClient, nil
 }
