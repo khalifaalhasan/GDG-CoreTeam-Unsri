@@ -73,15 +73,13 @@ Gunakan header berikut pada setiap request yang diproteksi:
 
 ### 🧪 Skenario Uji RBAC
 
-  Token Digunakan   Endpoint      Method   Ekspektasi      Keterangan
-  ----------------- ------------- -------- --------------- ------------------------
-  None              `/events`     GET      200 OK          Public
-  
-  Member/Admin      `/users/me`   GET      200 OK          AuthMiddleware
-  
-  Member            `/events`     POST     403 Forbidden   Ditolak RoleMiddleware
-  
-  Admin             `/users`      GET      200 OK          Diizinkan
+| Token Digunakan | Endpoint     | Method | Ekspektasi      | Keterangan           |
+|-----------------|--------------|--------|-----------------|----------------------|
+| None            | `/events`    | GET    | 200 OK          | Public               |
+| Member/Admin    | `/users/me`  | GET    | 200 OK          | AuthMiddleware       |
+| Member          | `/events`    | POST   | 403 Forbidden   | Ditolak RoleMiddleware |
+| Admin           | `/users`     | GET    | 200 OK          | Diizinkan            |
+
   
 
 ------------------------------------------------------------------------
