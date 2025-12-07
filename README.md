@@ -34,7 +34,7 @@ Sebelum menjalankan backend ini, pastikan Anda memiliki:
 
 ## ▶️ Cara Menjalankan Server
 
-1.  Pastikan file `config/serviceAccountKey.json` tersedia.
+1.  Pastikan file `/serviceAccountKey.json` tersedia.
 2.  Buka terminal di root project.
 3.  Jalankan server:
 
