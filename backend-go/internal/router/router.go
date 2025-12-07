@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// SetupRouter adalah fungsi utama yang menyiapkan dan mengembalikan Gin Engine
 func SetupRouter(
 	eventHandler *handler.EventHandler,
 	userHandler *handler.UserHandler,
@@ -15,8 +16,11 @@ func SetupRouter(
 ) *gin.Engine {
 	r := gin.Default()
 
+	// 1. Definisikan Middleware Khusus
+	// Middleware ini perlu akses ke userService untuk cek role di Firestore
 	adminOnlyMiddleware := handler.RoleMiddleware(userService, "admin")
 
+	// 2. Buat Group Utama /api/v1
 	v1 := r.Group("/api/v1")
 	{
 		// Health check
@@ -24,44 +28,10 @@ func SetupRouter(
 			c.JSON(200, gin.H{"message": "pong", "database": "connected"})
 		})
 
-		// --- EVENT ROUTES ---
-		events := v1.Group("/events")
-		{
-			//public routes
-			events.GET("", eventHandler.GetAllEvents)
-			events.GET("/:id", eventHandler.GetEventByID)
-
-			//protected routes
-			protected := events.Group("")
-			protected.Use(authMiddleware, adminOnlyMiddleware)
-			{
-				protected.POST("", eventHandler.CreateEvent)
-				protected.PUT("/:id", eventHandler.UpdateEvent)
-				protected.DELETE("/:id", eventHandler.DeleteEvent)
-			}
-		}
-
-		// --- USER ROUTES ---
-		baseUsers := v1.Group("/users")
-		baseUsers.Use(authMiddleware)
-		{
-			baseUsers.POST("/register", userHandler.Register)
-			baseUsers.GET("/me", userHandler.GetMyProfile)
-			baseUsers.PUT("/me", userHandler.UpdateMyProfile)
-
-			// Admin-only routes
-			adminUsers := baseUsers.Group("")
-			adminUsers.Use(adminOnlyMiddleware)
-			{
-				adminUsers.GET("", userHandler.GetAllUsers)
-				adminUsers.GET("/:id", userHandler.GetUserByID)
-				adminUsers.PUT("/:id/job", userHandler.AssignJob)
-			}
-
-		}
+		// 3. Panggil Sub-Router (modularitas)
+		AddEventRoutes(v1, eventHandler, authMiddleware, adminOnlyMiddleware)
+		AddUserRoutes(v1, userHandler, authMiddleware, adminOnlyMiddleware)
 	}
-		return r
 
+	return r
 }
-
-
