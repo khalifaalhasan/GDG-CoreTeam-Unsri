@@ -10,10 +10,10 @@ import (
 	"backend-go/internal/service"
 )
 
-// AuthMiddleware memvalidasi token dari Firebase
+
 func AuthMiddleware(authClient *auth.Client) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// 1. Ambil Header Authorization
+		
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header missing"})
@@ -21,10 +21,10 @@ func AuthMiddleware(authClient *auth.Client) gin.HandlerFunc {
 			return
 		}
 
-		// 2. Format harus "Bearer <TOKEN>"
+	
 		tokenString := strings.Replace(authHeader, "Bearer ", "", 1)
 		
-		// 3. Verifikasi Token ke Firebase
+		
 		token, err := authClient.VerifyIDToken(context.Background(), tokenString)
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token: " + err.Error()})
@@ -32,8 +32,8 @@ func AuthMiddleware(authClient *auth.Client) gin.HandlerFunc {
 			return
 		}
 
-		// 4. Token valid! Simpan UID user ke context Gin
-		// Supaya bisa dipakai di Handler nanti (misal: c.MustGet("uid"))
+	
+		
 		c.Set("uid", token.UID)
 		c.Next()
 	}
