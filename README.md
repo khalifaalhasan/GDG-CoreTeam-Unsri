@@ -107,14 +107,14 @@ Base URL:
 ------------------------------------------------------------------------
 
 ## 2️⃣ Event Routes
-| Endpoint         | Method | Akses       | Deskripsi                              |
-|------------------|--------|-------------|------------------------------------------|
-| `/users/register`| POST   | Wajib Login | Sinkronisasi profil user ke Firestore   |
-| `/users/me`      | GET    | Wajib Login | Ambil data user yang sedang login       |
-| `/users/me`      | PUT    | Wajib Login | Update nama user                        |
-| `/users`         | GET    | Admin Only  | List semua member                       |
-| `/users/:id`     | GET    | Admin Only  | Detail user                             |
-| `/users/:id/job` | POST   | Admin Only  | Berikan job desk                        |
+| Endpoint       | Method  | Akses      | Deskripsi               |
+|----------------|---------|------------|--------------------------|
+| `/events`      | GET     | Publik     | Mendapatkan semua event |
+| `/events/:id`  | GET     | Publik     | Mendapatkan detail event |
+| `/events`      | POST    | Admin Only | Membuat event baru      |
+| `/events/:id`  | PUT     | Admin Only | Mengubah data event     |
+| `/events/:id`  | DELETE  | Admin Only | Menghapus event         |
+
 
 
 
