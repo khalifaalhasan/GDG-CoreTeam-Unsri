@@ -113,19 +113,23 @@ Base URL:
 
   `/users/:id/job`           POST      Admin Only            Berikan job
                                                              desk
-  -------------------------------------------------------------------------
-
+  
 ------------------------------------------------------------------------
 
 ## 2️⃣ Event Routes
+-------------------------------------------------------------------------
+  Endpoint                   Method    Akses                 Deskripsi
+  -------------------------- --------- --------------------- --------------
+  `/events`                GET         Publik           Mendapatkan semua event
 
-  Endpoint        Method   Akses        Deskripsi
-  --------------- -------- ------------ -------------------
-  `/events`       GET      Publik       Ambil semua event
-  `/events/:id`   GET      Publik       Detail event
-  `/events`       POST     Admin Only   Membuat event
-  `/events/:id`   PUT      Admin Only   Update event
-  `/events/:id`   DELETE   Admin Only   Hapus event
+  `/events/:id`            GET         Publik           Mendapatkan detail event
+
+  `/events`                POST        Admin Only       Membuat event baru
+
+  `/events/:id`            PUT         Admin Only       Mengubah data event
+
+  `/events/:id`            DELETE      Admin Only       Menghapus event
+
 
 ------------------------------------------------------------------------
 
