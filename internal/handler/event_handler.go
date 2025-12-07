@@ -16,9 +16,9 @@ func NewEventHandler(s *service.EventService) *EventHandler {
 	return &EventHandler{service: s}
 }
 
-// GET /events
+
 func (h *EventHandler) GetAllEvents(c *gin.Context) {
-	events, err := h.service.GetEvents(c.Request.Context()) // Panggil service
+	events, err := h.service.GetEvents(c.Request.Context()) 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -26,7 +26,7 @@ func (h *EventHandler) GetAllEvents(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": events})
 }
 
-//get /events/:id
+
 func (h *EventHandler) GetEventByID(c *gin.Context){
 	id := c.Param("id")
 	event, err := h.service.GetEventByID(c.Request.Context(), id)
@@ -37,18 +37,17 @@ func (h *EventHandler) GetEventByID(c *gin.Context){
 	c.JSON(http.StatusOK, gin.H{"data" : event})
 }
 
-// POST /events
+
 func (h *EventHandler) CreateEvent(c *gin.Context) {
 	var event domain.Event
 	
-	// Binding JSON body ke Struct
+
 	if err := c.ShouldBindJSON(&event); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid data: " + err.Error()})
 		return
 	}
 
-	// TODO: Ambil role user dari JWT Token (Middleware)
-	// Untuk sementara kita hardcode role "core" agar bisa tes create
+
 	userRole := "core" 
 
 	if err := h.service.CreateNewEvent(c.Request.Context(), &event, userRole); err != nil {
@@ -61,9 +60,9 @@ func (h *EventHandler) CreateEvent(c *gin.Context) {
 
 
 
-// PUT /events/:id
+
 func (h *EventHandler) UpdateEvent(c *gin.Context) {
-	id := c.Param("id") // Ambil ID dari URL
+	id := c.Param("id") 
 	var event domain.Event
 
     // Bind JSON body ke struct
@@ -80,9 +79,9 @@ func (h *EventHandler) UpdateEvent(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Event updated successfully"})
 }
 
-// DELETE /events/:id
+
 func (h *EventHandler) DeleteEvent(c *gin.Context) {
-	id := c.Param("id") // Ambil ID dari URL
+	id := c.Param("id") 
 	if err := h.service.DeleteEvent(c.Request.Context(), id); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
